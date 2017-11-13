@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {Game} from "../model/Game";
 
 export class ListItem extends React.Component
 {
@@ -13,19 +12,20 @@ export class ListItem extends React.Component
 
     handlePress(e)
     {
-        //console.log(e.currentTarget);
         this.props.clickedItem(this.props.gameKey);
     }
 
     render()
     {
+        //console.log("In List Item, name: " + this.props.game.name);
+
         return(
 
             <TouchableOpacity
                 onPress={this.handlePress}
                 style={{backgroundColor: 'darkgoldenrod'}}
             >
-                <View>{this.props.game}</View>
+                <Text>Name: {this.props.game.name}, Release year: {this.props.game.releaseYear}, Producer: {this.props.game.producer}</Text>
             </TouchableOpacity>
         );
     }

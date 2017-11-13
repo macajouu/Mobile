@@ -15,16 +15,16 @@ export class MainScreen extends React.Component
         super(props);
     }
 
-
     render()
     {
-
         return(
 
             <View style={styles.container}>
 
                 <View style={{flex: 1}}>
-                    <GameForm></GameForm>
+
+                    <GameForm/>
+
                 </View>
 
 
