@@ -1,17 +1,18 @@
 import React from 'react';
-import {Linking, Button, Text, TextInput, View} from 'react-native';
+import {Text, View} from 'react-native';
+import {StyleSheet, TextInput} from 'react-native';
 
-export class GameForm extends React.Component {
+export class GameEdit extends React.Component {
 
-    constructor(props) {
+    constructor(props)
+    {
         super(props);
 
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleYearChange = this.handleYearChange.bind(this);
         this.handleProducerChange = this.handleProducerChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
 
-        this.state = { nameText: '', yearText: '', producerText: ''};
+        this.state = { nameText: this.props.name, yearText: this.props.releaseYear, producerText: this.props.producer};
     }
 
     handleNameChange(nameText)
@@ -29,50 +30,51 @@ export class GameForm extends React.Component {
         this.setState({producerText});
     }
 
-    handleSubmit()
+    componentWillUnmount()
     {
-        //Send email
-        let body = `Added a game with name: ${this.state.nameText}, release year: ${this.state.yearText}, producer: ${this.state.producerText}`;
+        let newGame = { game: {name: this.state.nameText, releaseYear: this.state.yearText, producer: this.state.producerText} };
 
-        Linking.openURL('mailto:macajouu@yahoo.com?subject=React&body=' + body);
+        this.props.updateGame(this.props.index, newGame);
     }
 
     render() {
         return (
             <View>
-                <Text>Introduce input for a game:</Text>
 
-
+                <Text style={styles.titleText}>Name:</Text>
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     name='NameInput'
                     onChangeText={this.handleNameChange}
                     value={this.state.nameText}
-                    placeholder='Name'
                 />
 
+                <Text style={styles.titleText}>Release Year:</Text>
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     name='YearInput'
                     onChangeText={this.handleYearChange}
                     value={this.state.yearText}
-                    placeholder='Release year'
                 />
 
+                <Text style={styles.titleText}>Producer:</Text>
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     name='ProducerInput'
                     onChangeText={this.handleProducerChange}
                     value={this.state.producerText}
-                    placeholder='Producer'
                 />
-
-                <Button
-                    title='Send email'
-                    onPress={this.handleSubmit}
-                />
-
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    baseText: {
+        fontFamily: 'Cochin',
+    },
+    titleText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
+});

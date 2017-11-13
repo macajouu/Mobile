@@ -1,6 +1,5 @@
 import React from 'react';
-import {Button, FlatList, Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {Game} from "../model/Game";
+import {Button, ListView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {ListItem} from "./ListItem";
 
 export class List extends React.Component
@@ -10,38 +9,47 @@ export class List extends React.Component
         super(props);
 
         this.handleClickedItem = this.handleClickedItem.bind(this);
+        this.handleChangedObject = this.handleChangedObject.bind(this);
+
+        this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
         this.state = {array: [
-                        {key: 'g1', game: <Game name='hoi4' releaseYear='2016' producer='paradox'/>},
-                        {key: 'g2', game: <Game name='eu4' releaseYear='2015' producer='paradox'/>},
-                        {key: 'g3', game: <Game name='AC - Origins' releaseYear='2017' producer='Ubisoft'/>},
-                        {key: 'g4', game: <Game name='Fifa17' releaseYear='2016' producer='EA Sports'/>}
+                        {key: 'g0', game:  {name: 'hoi4', releaseYear: '2016', producer: 'paradox'}},
+                        {key: 'g1', game:  {name: 'eu4', releaseYear: '2015', producer: 'paradox'}},
+                        {key: 'g2', game:  {name: 'AC - Origins', releaseYear: '2017', producer: 'Ubisoft'}},
+                        {key: 'g3', game:  {name: 'Fifa17', releaseYear: '2016', producer: 'EA Sports'}}
                         ]};
 
     }
 
     handleClickedItem(index)
     {
-        console.log("in list!   -   " + this.state.array[index].game.releaseYear);
+        let game = this.state.array[index].game;
 
-        this.props.navigator('Details');
+        // pass the callback func!
+        this.props.navigator('Details', {index: index, game: game, updateGame: this.handleChangedObject});
     }
 
+    handleChangedObject(index, newObject)
+    {
+        let newArray = this.state.array;
+        newArray[index].game = newObject.game;
+
+        this.setState({array: newArray});
+
+        //console.log("NewObject: " +  this.state.array[index].game.name);
+    }
 
     render()
     {
-        //should be in state probably
-        // let arr = [];
-        // arr.push({key: 'g1', game: <Game name='hoi4' releaseYear='2016' producer='paradox'/>});
-        // arr.push({key: 'g2', game: <Game name='eu4' releaseYear='2015' producer='paradox'/>});
-        // arr.push({key: 'g3', game: <Game name='AC - Origins' releaseYear='2017' producer='Ubisoft'/>});
-        // arr.push({key: 'g4', game: <Game name='Fifa17' releaseYear='2016' producer='EA Sports'/>});
-
         return(
-            <FlatList
-                data={this.state.array}
-                renderItem={({item, index}) => <ListItem gameKey={index} game={item.game} clickedItem={this.handleClickedItem}/>}
-            />
+
+
+           <ListView
+               dataSource={this.ds.cloneWithRows(this.state.array)}
+               renderRow={ item =>  <ListItem gameKey={item.key[1]} game={item.game} clickedItem={this.handleClickedItem}/> }
+
+           />
         );
     }
 }

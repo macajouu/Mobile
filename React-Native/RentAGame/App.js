@@ -18,7 +18,10 @@ const SimpleStack = StackNavigator({
         screen: MainScreen
     },
     Details: {
-        screen: DetailScreen
+        screen: DetailScreen,
+        navigationOptions: ({ navigation }) => ({
+            title: `${navigation.state.params.game.name.toUpperCase()}`,
+        }),
     },
 });
 
