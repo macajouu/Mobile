@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, ListView, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {Button, FlatList, ListView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {ListItem} from "./ListItem";
 
 export class List extends React.Component
@@ -42,14 +42,12 @@ export class List extends React.Component
 
     render()
     {
-        return(
-
-
-           <ListView
-               dataSource={this.ds.cloneWithRows(this.state.array)}
-               renderRow={ item =>  <ListItem gameKey={item.key[1]} game={item.game} clickedItem={this.handleClickedItem}/> }
-
-           />
+        return (
+            <FlatList
+                data={this.state.array}
+                extraData={this.state}
+                renderItem={ ({item}) => <ListItem gameKey={item.key[1]} game={item.game} clickedItem={this.handleClickedItem}/> }
+            />
         );
     }
 }
